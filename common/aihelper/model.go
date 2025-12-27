@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
+	"GopherAI/config"
 	"github.com/cloudwego/eino-ext/components/model/ollama"
 	"github.com/cloudwego/eino-ext/components/model/openai"
 	"github.com/cloudwego/eino/components/model"
@@ -28,9 +28,10 @@ type OpenAIModel struct {
 }
 
 func NewOpenAIModel(ctx context.Context) (*OpenAIModel, error) {
-	key := os.Getenv("OPENAI_API_KEY")
-	modelName := os.Getenv("OPENAI_MODEL_NAME")
-	baseURL := os.Getenv("OPENAI_BASE_URL")
+	config := config.GetConfig()
+	key := config.OpenAIAPIKey
+	modelName := config.OpenAIModelName
+	baseURL := config.OpenAIBaseURL
 
 	llm, err := openai.NewChatModel(ctx, &openai.ChatModelConfig{
 		BaseURL: baseURL,
@@ -88,6 +89,17 @@ type OllamaModel struct {
 }
 
 func NewOllamaModel(ctx context.Context, baseURL, modelName string) (*OllamaModel, error) {
+	// 从配置文件读取默认值
+	conf := config.GetConfig()
+	
+	// 如果没有提供参数，使用配置文件中的默认值
+	if baseURL == "" {
+		baseURL = conf.OllamaBaseURL
+	}
+	if modelName == "" {
+		modelName = conf.OllamaModelName
+	}
+
 	llm, err := ollama.NewChatModel(ctx, &ollama.ChatModelConfig{
 		BaseURL: baseURL,
 		Model:   modelName,

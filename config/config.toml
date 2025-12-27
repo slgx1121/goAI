@@ -33,3 +33,14 @@ charset =  "utf8mb4"
   username= "guest"
   password= "guest"
   vhost= "/"
+
+[aiConfig]
+# OpenAI配置
+openai_api_key = "sk-0d186267e37344b98abd5daa99c3b8ef"
+openai_model_name = "deepseek-chat"
+openai_base_url = "https://api.deepseek.com/v1"
+# Ollama配置
+ollama_base_url = "http://localhost:11434"
+ollama_model_name = "llama3"
+# 默认模型类型 1:OpenAI 2:Ollama
+default_model_type = "1"

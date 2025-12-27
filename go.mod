@@ -90,3 +90,5 @@ require (
 )
 
 replace GopherAI => ./
+
+replace golang.org/x/crypto => golang.org/x/crypto v0.21.0

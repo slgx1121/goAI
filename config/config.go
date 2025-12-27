@@ -48,6 +48,19 @@ type Rabbitmq struct {
 	RabbitmqVhost    string `toml:"vhost"`
 }
 
+// AIConfig AI模型配置
+type AIConfig struct {
+	// OpenAI配置
+	OpenAIAPIKey     string `toml:"openai_api_key"`
+	OpenAIModelName  string `toml:"openai_model_name"`
+	OpenAIBaseURL    string `toml:"openai_base_url"`
+	// Ollama配置
+	OllamaBaseURL    string `toml:"ollama_base_url"`
+	OllamaModelName  string `toml:"ollama_model_name"`
+	// 默认模型类型 1:OpenAI 2:Ollama
+	DefaultModelType string `toml:"default_model_type"`
+}
+
 type Config struct {
 	EmailConfig `toml:"emailConfig"`
 	RedisConfig `toml:"redisConfig"`
@@ -55,6 +68,7 @@ type Config struct {
 	JwtConfig   `toml:"jwtConfig"`
 	MainConfig  `toml:"mainConfig"`
 	Rabbitmq    `toml:"rabbitmqConfig"`
+	AIConfig    `toml:"aiConfig"`
 }
 
 type RedisKeyConfig struct {

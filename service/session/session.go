@@ -3,6 +3,7 @@ package session
 import (
 	"GopherAI/common/aihelper"
 	"GopherAI/common/code"
+	"GopherAI/config"
 	"GopherAI/dao/session"
 	"GopherAI/model"
 	"context"
@@ -47,8 +48,9 @@ func CreateSessionAndSendMessage(userName string, userQuestion string, modelType
 
 	//2：获取AIHelper并通过其管理消息
 	manager := aihelper.GetGlobalManager()
+	cfg := config.GetConfig()
 	config := map[string]interface{}{
-		"apiKey": "your-api-key", // TODO: 从配置中获取
+		"apiKey": cfg.OpenAIAPIKey,
 	}
 	helper, err := manager.GetOrCreateAIHelper(userName, createdSession.ID, modelType, config)
 	if err != nil {
@@ -66,7 +68,6 @@ func CreateSessionAndSendMessage(userName string, userQuestion string, modelType
 	return createdSession.ID, aiResponse.Content, code.CodeSuccess
 }
 
-
 func CreateStreamSessionOnly(userName string, userQuestion string) (string, code.Code) {
 	newSession := &model.Session{
 		ID:       uuid.New().String(),
@@ -81,7 +82,6 @@ func CreateStreamSessionOnly(userName string, userQuestion string) (string, code
 	return createdSession.ID, code.CodeSuccess
 }
 
-
 func StreamMessageToExistingSession(userName string, sessionID string, userQuestion string, modelType string, writer http.ResponseWriter) code.Code {
 	// 确保 writer 支持 Flush
 	flusher, ok := writer.(http.Flusher)
@@ -91,8 +91,9 @@ func StreamMessageToExistingSession(userName string, sessionID string, userQuest
 	}
 
 	manager := aihelper.GetGlobalManager()
+	cfg := config.GetConfig()
 	config := map[string]interface{}{
-		"apiKey": "your-api-key", // TODO: 从配置中获取
+		"apiKey": cfg.OpenAIAPIKey,
 	}
 	helper, err := manager.GetOrCreateAIHelper(userName, sessionID, modelType, config)
 	if err != nil {
@@ -119,7 +120,6 @@ func StreamMessageToExistingSession(userName string, sessionID string, userQuest
 		return code.AIModelFail
 	}
 
-
 	_, err = writer.Write([]byte("data: [DONE]\n\n"))
 	if err != nil {
 		log.Println("StreamMessageToExistingSession write DONE error:", err)
@@ -130,14 +130,12 @@ func StreamMessageToExistingSession(userName string, sessionID string, userQuest
 	return code.CodeSuccess
 }
 
-
 func CreateStreamSessionAndSendMessage(userName string, userQuestion string, modelType string, writer http.ResponseWriter) (string, code.Code) {
 
 	sessionID, code_ := CreateStreamSessionOnly(userName, userQuestion)
 	if code_ != code.CodeSuccess {
 		return "", code_
 	}
-
 
 	code_ = StreamMessageToExistingSession(userName, sessionID, userQuestion, modelType, writer)
 	if code_ != code.CodeSuccess {
@@ -148,13 +146,12 @@ func CreateStreamSessionAndSendMessage(userName string, userQuestion string, mod
 	return sessionID, code.CodeSuccess
 }
 
-
-
 func ChatSend(userName string, sessionID string, userQuestion string, modelType string) (string, code.Code) {
 	//1：获取AIHelper
 	manager := aihelper.GetGlobalManager()
+	cfg := config.GetConfig()
 	config := map[string]interface{}{
-		"apiKey": "your-api-key", // TODO: 从配置中获取
+		"apiKey": cfg.OpenAIAPIKey,
 	}
 	helper, err := manager.GetOrCreateAIHelper(userName, sessionID, modelType, config)
 	if err != nil {
