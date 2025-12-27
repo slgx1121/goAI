@@ -399,7 +399,6 @@ export default {
           question: question,
           modelType: selectedModel.value
         })
-        console.log('123',selectedModel.value)
 
         if (response.data && response.data.status_code === 1000) {
           const sessionId = String(response.data.sessionId)

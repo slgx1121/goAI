@@ -36,9 +36,12 @@ charset =  "utf8mb4"
 
 [aiConfig]
 # OpenAI配置
-openai_api_key = "sk-0d186267e37344b98abd5daa99c3b8ef"
-openai_model_name = "deepseek-chat"
-openai_base_url = "https://api.deepseek.com/v1"
+#openai_api_key = "sk-0d186267e37344b98abd5daa99c3b8ef"
+#openai_model_name = "deepseek-chat"
+#openai_base_url = "https://api.deepseek.com/v1"
+openai_api_key = "personal-a9015299844a6123727ff1414f266402"
+openai_base_url = "http://llmapi.bilibili.co/v1"
+openai_model_name = "deepseek-r1"
 # Ollama配置
 ollama_base_url = "http://localhost:11434"
 ollama_model_name = "llama3"
