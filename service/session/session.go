@@ -24,9 +24,30 @@ func GetUserSessionsByUserName(userName string) ([]model.SessionInfo, error) {
 	var SessionInfos []model.SessionInfo
 
 	for _, session := range Sessions {
+		// 获取该会话的AIHelper
+		helper, exists := manager.GetAIHelper(userName, session)
+		title := session // 默认用sessionID作为标题
+		
+		if exists {
+			// 获取会话的所有消息
+			messages := helper.GetMessages()
+			
+			// 查找第一条用户消息作为标题
+			for _, msg := range messages {
+				if msg.IsUser {
+					title = msg.Content
+					// 限制标题长度
+					if len(title) > 50 {
+						title = title[:50] + "..."
+					}
+					break
+				}
+			}
+		}
+		
 		SessionInfos = append(SessionInfos, model.SessionInfo{
 			SessionID: session,
-			Title:     session, // 暂时用sessionID作为标题，后续重构需要的时候可以更改
+			Title:     title,
 		})
 	}
 
